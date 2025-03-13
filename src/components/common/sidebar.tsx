@@ -1,86 +1,55 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 
-import {Button, Layout, Menu, theme} from "antd";
-import axios from "axios";
-import {GetServerSideProps} from "next";
-
-import {
-  MenuFoldOutlined,
-  MenuUnfoldOutlined,
-  UserOutlined,
-} from "@ant-design/icons";
+import {Layout, Menu, theme} from "antd";
+import {usePathname, useRouter} from "next/navigation";
 
 const {Header, Sider, Content} = Layout;
 
-const convertMenu = (list: any[]): any[] | undefined => {
-  return (
-    list &&
-    list.map((item: any) => {
-      return {
-        key: item.id,
-        icon: <UserOutlined />,
-        label: item.name,
-        children: convertMenu(item.items),
-      };
-    })
-  );
-};
-
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const res = await axios.get(
-    "https://api-us.storyblok.com/v2/cdn/datasource_entries?datasource=navigation-menu&token=4pSJLzsKIlxLza4dLwa9iQtt"
-  );
-  let data = null;
-  if (res) {
-    data = convertMenu(res.data.datasource_entries);
-  }
-
-  return {
-    props: {
-      navigation: data,
-    },
-  };
-};
-
-const Sidebar = ({props}: any) => {
+const Sidebar = ({
+  navigation,
+  children,
+}: {
+  navigation: any[];
+  children: React.ReactNode;
+}) => {
+  const pathName = usePathname();
+  const router = useRouter();
   const [collapsed, setCollapsed] = useState(false);
+  const [selected, setSelected] = useState("");
   const {
     token: {colorBgContainer, borderRadiusLG},
   } = theme.useToken();
+  useEffect(() => {
+    setSelected(pathName);
+  }, [pathName]);
 
   return (
-    <Layout>
-      <Sider trigger={null} collapsible collapsed={collapsed}>
+    <Layout className="h-screen">
+      <Sider
+        theme="light"
+        trigger={null}
+        // collapsed={collapsed}
+        className="pt-16 border-r border-gray-200/50 "
+      >
         <Menu
-          mode="inline"
-          defaultSelectedKeys={["1"]}
-          items={props.navigation}
+          mode="vertical"
+          items={navigation}
+          selectedKeys={[selected]}
+          onSelect={({key}) => {
+            setSelected(key);
+            router.push(key);
+          }}
         />
       </Sider>
       <Layout>
-        <Header style={{padding: 0, background: colorBgContainer}}>
-          <Button
+        <Header className="!bg-white border-b border-gray-200/50">
+          {/* <Button
             type="text"
             icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
             onClick={() => setCollapsed(!collapsed)}
-            style={{
-              fontSize: "16px",
-              width: 64,
-              height: 64,
-            }}
-          />
+          /> */}
         </Header>
-        <Content
-          style={{
-            margin: "24px 16px",
-            padding: 24,
-            minHeight: 280,
-            background: colorBgContainer,
-            borderRadius: borderRadiusLG,
-          }}
-        >
-          Content
-        </Content>
+        <Content className="p-4 bg-white">{children}</Content>
       </Layout>
     </Layout>
   );
