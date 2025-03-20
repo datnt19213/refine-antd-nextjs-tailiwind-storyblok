@@ -11,6 +11,7 @@ import Table from "../block/component/table";
 import Navigation from "../block/control/navigation";
 import LinkItem from "../block/elements/link-item";
 import Grid from "../block/layout/grid";
+import Linear from "../block/layout/linear";
 
 interface PageTemplateProps {
   story: EnhancedStoryblokStory;
@@ -43,6 +44,8 @@ export function DynamicBlock({block}: {block: any}) {
       return <Table block={block} />;
     case "navigation":
       return <Navigation block={block} />;
+    case "linear":
+      return <Linear block={block} />;
     default:
       return null;
   }

@@ -9,6 +9,7 @@ const Grid = ({block}: any) => {
         display: "grid",
         gridTemplateColumns: `repeat(${block.columns}, 1fr)`,
       }}
+      className="gap-4 mb-3"
     >
       {block.gridLayout.map((blok: any) => (
         <DynamicBlock key={blok._uid} block={blok} />

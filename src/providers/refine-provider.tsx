@@ -3,10 +3,9 @@
 import {Suspense, useEffect, useState} from "react";
 
 import {ConfigProvider} from "antd";
-import axios from "axios";
 
 import Sidebar from "@/components/common/sidebar";
-import {dynamicRouteManager} from "@/lib/refine-routes";
+import {DynamicRoute, dynamicRouteManager} from "@/lib/refine-routes";
 import {ErrorComponent, ThemedLayoutV2} from "@refinedev/antd";
 import {Refine, ResourceProps} from "@refinedev/core";
 import routerProvider from "@refinedev/nextjs-router";
@@ -18,33 +17,22 @@ export function DynamicRefineProvider({children}: {children: React.ReactNode}) {
   useEffect(() => {
     async function loadRoutes() {
       // Sync routes từ Storyblok
-      await dynamicRouteManager.syncRoutesFromStoryblok();
-
+      const routes = await dynamicRouteManager.syncRoutesFromStoryblok();
+      console.log("Routes:", routes);
       // Cập nhật resources
       setResources(dynamicRouteManager.getRefineResources());
+
+      const data = routes.map((item: DynamicRoute) => ({
+        key: item.path,
+        icon: <img src={item.icon} className="size-5 aspect-square" />,
+        label: item.p_name,
+        order: item.order,
+        // children: [],
+      }));
+
+      setMenu(data.sort((a, b) => a.order - b.order));
     }
-
     loadRoutes();
-  }, []);
-
-  useEffect(() => {
-    const fetch = async () => {
-      const res = await axios.get(
-        `https://api-us.storyblok.com/v2/cdn/datasource_entries?datasource=navigation-menu&token=4pSJLzsKIlxLza4dLwa9iQtt`
-      );
-      if (res.status === 200) {
-        const data = res.data.datasource_entries.map((item: any) => {
-          return {
-            key: item.value,
-            icon: "",
-            label: item.name.charAt(0).toUpperCase() + item.name.slice(1),
-            // children: [],
-          };
-        });
-        setMenu(data);
-      }
-    };
-    fetch();
   }, []);
 
   return (
