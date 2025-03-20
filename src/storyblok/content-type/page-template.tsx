@@ -1,23 +1,26 @@
 "use client";
 
-import StoryblokService from "@/lib/storyblok";
-import {EnhancedStoryblokStory} from "@/types/storyblok";
+import StoryblokService from '@/lib/storyblok';
+import { EnhancedStoryblokStory } from '@/types/storyblok';
 
-import Hero from "../block/component/hero";
-import NotificationList from "../block/component/notification-list";
-import StatisticCard from "../block/component/statistic-card";
-import StatisticRealtime from "../block/component/statistic-realtime";
-import Table from "../block/component/table";
-import Navigation from "../block/control/navigation";
-import LinkItem from "../block/elements/link-item";
-import Grid from "../block/layout/grid";
-import Linear from "../block/layout/linear";
+import Hero from '../block/component/hero';
+import NotificationList from '../block/component/notification-list';
+import StatisticCard from '../block/component/statistic-card';
+import StatisticRealtime from '../block/component/statistic-realtime';
+import Table from '../block/component/table';
+import Navigation from '../block/control/navigation';
+import LinkItem from '../block/elements/link-item';
+import Grid from '../block/layout/grid';
+import Linear from '../block/layout/linear';
 
 interface PageTemplateProps {
-  story: EnhancedStoryblokStory;
+  story: EnhancedStoryblokStory | any;
 }
 
-export default function PageTemplate({story}: PageTemplateProps) {
+export default function PageTemplate({ story }: PageTemplateProps) {
+  if (!story) {
+    return <></>;
+  }
   // Safely extract blocks
   const blocks = StoryblokService.extractBlocks(story.content);
 
@@ -26,7 +29,7 @@ export default function PageTemplate({story}: PageTemplateProps) {
   ));
 }
 
-export function DynamicBlock({block}: {block: any}) {
+export function DynamicBlock({ block }: { block: any }) {
   switch (block.component) {
     case "hero":
       return <Hero block={block} />;

@@ -1,9 +1,14 @@
-import "./globals.css";
+import './globals.css';
 
-import type {Metadata} from "next";
-import {Geist, Geist_Mono} from "next/font/google";
+import { Suspense } from 'react';
 
-import {DynamicRefineProvider} from "@/providers/refine-provider";
+import type { Metadata } from 'next';
+import {
+  Geist,
+  Geist_Mono,
+} from 'next/font/google';
+
+import { DynamicRefineProvider } from '@/providers/refine-provider';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,7 +36,7 @@ export default function RootLayout({
         suppressHydrationWarning
         className={`${geistSans.variable} ${geistMono.variable} antialiased w-full min-h-screen`}
       >
-        <DynamicRefineProvider>{children}</DynamicRefineProvider>
+        <Suspense fallback={<div>Loading...</div>}><DynamicRefineProvider>{children}</DynamicRefineProvider></Suspense>
       </body>
     </html>
   );

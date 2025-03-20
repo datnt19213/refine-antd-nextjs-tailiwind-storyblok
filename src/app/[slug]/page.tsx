@@ -1,8 +1,10 @@
-import {notFound} from "next/navigation";
+import { Suspense } from 'react';
+
+import { notFound } from 'next/navigation';
 
 // src/app/(storyblok)/[...slug]/page.tsx
-import StoryblokService from "@/lib/storyblok";
-import PageTemplate from "@/storyblok/content-type/page-template";
+import StoryblokService from '@/lib/storyblok';
+import PageTemplate from '@/storyblok/content-type/page-template';
 
 export async function generateStaticParams() {
   const stories = await StoryblokService.getAllStories();
@@ -13,7 +15,7 @@ export async function generateStaticParams() {
 export default async function DynamicStoryblokPage({
   params,
 }: {
-  params: {slug: string | string[]};
+  params: { slug: string | string[] };
 }) {
   // Chuyển slug thành chuỗi nếu nó là một mảng
   const slugPath =
@@ -25,12 +27,12 @@ export default async function DynamicStoryblokPage({
   const story = slugPath && (await StoryblokService.getStoryBySlug(slugPath));
 
   if (!story) {
-    return notFound();
+    return <Suspense fallback={<div>Loading...</div>}>{notFound()}</Suspense>;
   }
 
   return (
-    <>
+    <Suspense fallback={<div>Loading...</div>}>
       <PageTemplate story={story} />
-    </>
+    </Suspense>
   );
 }
