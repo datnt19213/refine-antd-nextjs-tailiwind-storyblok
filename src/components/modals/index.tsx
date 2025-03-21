@@ -1,33 +1,33 @@
 import React, {
-    ChangeEvent,
-    useState,
+  ChangeEvent,
+  useState,
 } from 'react';
 
 import {
-    Button,
-    Modal,
+  Button,
+  Modal,
 } from 'antd';
 import dayjs, { Dayjs } from 'dayjs';
 import {
-    ArrowLeft,
-    ArrowRight,
-    Loader2,
+  ArrowLeft,
+  ArrowRight,
+  Loader2,
 } from 'lucide-react';
 
 import { createReview } from '@/services';
 
 import ThankYou from '../common/thankyou';
 import {
-    ConsentCheckbox,
-    DatePickerComponent,
-    FreeTextInput,
-    Matrix,
-    MultiSelect,
-    NPS,
-    PictureSelection,
-    Rating,
-    ScheduleMeeting,
-    SingleSelect,
+  ConsentCheckbox,
+  DatePickerComponent,
+  FreeTextInput,
+  Matrix,
+  MultiSelect,
+  NPS,
+  PictureSelection,
+  Rating,
+  ScheduleMeeting,
+  SingleSelect,
 } from '../forms';
 
 export const ModalSurvey = () => {
@@ -42,8 +42,8 @@ export const ModalSurvey = () => {
     const [selectedPictures, setSelectedPictures] = useState<File[]>([]);
     const [selectedOptions, setSelectedOptions] = useState<string>("");
     const [selectedOptions2, setSelectedOptions2] = useState<string[]>([]);
-    const [selectedRating, setSelectedRating] = useState<number | null>(null);
-    const [selectedNPS, setSelectedNPS] = useState<number | null>(null);
+    const [selectedRating, setSelectedRating] = useState<number>(0);
+    const [selectedNPS, setSelectedNPS] = useState<number>(0);
     const [selectedSchedule, setSelectedSchedule] = useState<string | string[]>("");
     const [checked, setChecked] = useState<boolean>(false);
 
@@ -137,6 +137,7 @@ export const ModalSurvey = () => {
 
     function handleNPSChange(value: number): void {
         setSelectedNPS(value);
+        console.log(value);
     }
 
     return (
@@ -156,10 +157,10 @@ export const ModalSurvey = () => {
                         currentStep === 2 && <MultiSelect label="What are your favorite fruits?" options={['Apple', 'Banana', 'Orange']} onChange={handleMultiSelectChange} />
                     }
                     {
-                        currentStep === 3 && <ConsentCheckbox label="Do you agree to our terms and conditions?" checked={false} onChange={handleConsentCheckboxChange} />
+                        currentStep === 3 && <ConsentCheckbox label="Do you agree to our terms and conditions?" checked={checked} onChange={handleConsentCheckboxChange} />
                     }
                     {
-                        currentStep === 4 && <DatePickerComponent label="When do you want to meet?" value={dayjs("2025-03-20 12:00")} onChange={handleDatePickerChange} />
+                        currentStep === 4 && <DatePickerComponent label="When do you want to meet?" value={dayjs()} onChange={handleDatePickerChange} />
                     }
                     {
                         currentStep === 5 && <ScheduleMeeting label="When do you want to schedule a meeting?" value={dayjs()} onChange={handleScheduleMeetingChange}
@@ -173,10 +174,10 @@ export const ModalSurvey = () => {
                         currentStep === 7 && <PictureSelection label="Upload a picture of yourself" onChange={handlePictureSelectionChange} />
                     }
                     {
-                        currentStep === 8 && <Rating label="How would you rate your experience?" onChange={handleRatingChange} />
+                        currentStep === 8 && <Rating label="How would you rate your experience?" value={selectedRating} onChange={handleRatingChange} />
                     }
                     {
-                        currentStep === 9 && <NPS label="How likely are you to recommend us?" value={0} onChange={handleNPSChange} />
+                        currentStep === 9 && <NPS label="How likely are you to recommend us?" value={selectedNPS} onChange={handleNPSChange} />
                     }
                     {
                         submitted && <ThankYou
