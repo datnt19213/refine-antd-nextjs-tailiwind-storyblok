@@ -12,11 +12,12 @@ export async function generateStaticParams() {
   return slugs;
 }
 
-export default async function DynamicStoryblokPage({
-  params,
-}: {
-  params: { slug: string | string[] };
-}) {
+export default async function DynamicStoryblokPage(
+  props: {
+    params: Promise<{ slug: string | string[] }>;
+  }
+) {
+  const params = await props.params;
   // Chuyển slug thành chuỗi nếu nó là một mảng
   const slugPath =
     params &&

@@ -1,16 +1,29 @@
 "use client";
 
-import {Suspense, useEffect, useState} from "react";
+import {
+  Suspense,
+  useEffect,
+  useState,
+} from 'react';
 
-import {ConfigProvider} from "antd";
+import { ConfigProvider } from 'antd';
 
-import Sidebar from "@/components/common/sidebar";
-import {DynamicRoute, dynamicRouteManager} from "@/lib/refine-routes";
-import {ErrorComponent, ThemedLayoutV2} from "@refinedev/antd";
-import {Refine, ResourceProps} from "@refinedev/core";
-import routerProvider from "@refinedev/nextjs-router";
+import Sidebar from '@/components/common/sidebar';
+import {
+  DynamicRoute,
+  dynamicRouteManager,
+} from '@/lib/refine-routes';
+import {
+  ErrorComponent,
+  ThemedLayoutV2,
+} from '@refinedev/antd';
+import {
+  Refine,
+  ResourceProps,
+} from '@refinedev/core';
+import routerProvider from '@refinedev/nextjs-router';
 
-export function DynamicRefineProvider({children}: {children: React.ReactNode}) {
+export function DynamicRefineProvider({ children }: { children: React.ReactNode }) {
   const [resources, setResources] = useState<ResourceProps[]>([]);
   const [menu, setMenu] = useState<any[]>([]);
 
@@ -36,7 +49,13 @@ export function DynamicRefineProvider({children}: {children: React.ReactNode}) {
   }, []);
 
   return (
-    <ConfigProvider>
+    <ConfigProvider theme={{
+      components: {
+        Rate: {
+          starSize: 50
+        }
+      }
+    }}>
       <Refine
         routerProvider={routerProvider}
         resources={resources}

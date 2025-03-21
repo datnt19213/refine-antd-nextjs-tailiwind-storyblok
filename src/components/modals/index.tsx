@@ -23,7 +23,6 @@ import {
   FreeTextInput,
   Matrix,
   MultiSelect,
-  NPS,
   PictureSelection,
   Rating,
   ScheduleMeeting,
@@ -43,11 +42,11 @@ export const ModalSurvey = () => {
     const [selectedOptions, setSelectedOptions] = useState<string>("");
     const [selectedOptions2, setSelectedOptions2] = useState<string[]>([]);
     const [selectedRating, setSelectedRating] = useState<number>(0);
-    const [selectedNPS, setSelectedNPS] = useState<number>(0);
     const [selectedSchedule, setSelectedSchedule] = useState<string | string[]>("");
     const [checked, setChecked] = useState<boolean>(false);
+    const [isLoad, setIsLoad] = useState<boolean>(false);
 
-    const steps = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+    const steps = [0, 1, 2, 3, 4, 5, 6, 7, 8]
 
 
     const showModal = () => {
@@ -94,8 +93,9 @@ export const ModalSurvey = () => {
         setChecked(e.target.checked);
     }
 
-    function handleFreeTextInputChange(e: ChangeEvent<HTMLInputElement>): void {
+    function handleFreeTextInputChange(e: ChangeEvent<HTMLTextAreaElement>): void {
         setText(e.target.value);
+        console.log(e.target.value);
     }
 
     const handleDatePickerChange = (date: Dayjs | null, dateString: string | string[]) => {
@@ -135,20 +135,15 @@ export const ModalSurvey = () => {
         setSelectedRating(value);
     }
 
-    function handleNPSChange(value: number): void {
-        setSelectedNPS(value);
-        console.log(value);
-    }
-
     return (
         <>
             <Button type="primary" onClick={showModal}>
                 Open Modal
             </Button>
-            <Modal className='min-w-[900px]' title="Evaluation" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
-                <div className='min-h-[300px]'>
+            <Modal className='min-w-[900px]' title="Evaluation" open={isModalOpen} onOk={handleOk} onCancel={handleCancel} >
+                <div className='min-h-[300px] flex flex-col pt-12 items-center w-full'>
                     {
-                        currentStep === 0 && <FreeTextInput label="What is your name?" value={text} onChange={handleFreeTextInputChange} />
+                        currentStep === 0 && <FreeTextInput label="How's your experience?" value={text} onChange={handleFreeTextInputChange} />
                     }
                     {
                         currentStep === 1 && <SingleSelect label="What is your favorite color?" options={['Red', 'Green', 'Blue']} onChange={handleSingleSelectChange} />
@@ -177,17 +172,15 @@ export const ModalSurvey = () => {
                         currentStep === 8 && <Rating label="How would you rate your experience?" value={selectedRating} onChange={handleRatingChange} />
                     }
                     {
-                        currentStep === 9 && <NPS label="How likely are you to recommend us?" value={selectedNPS} onChange={handleNPSChange} />
-                    }
-                    {
-                        submitted && <ThankYou
+                        submitted && isLoad && <ThankYou
                             title="Thank You for Your Order!"
                             message="Your order has been successfully placed"
                             subtitle="You will receive a confirmation email shortly"
-                        /> || <div className="flex justify-center items-center h-[100px] w-[100px] aspect-square">
-                            <Loader2 size={32} className='animate-spin ease-in' />
-                        </div>
+                        />
                     }
+                    {submitted && !isLoad && <div className="flex justify-center items-center h-[100px] w-[100px] aspect-square">
+                        <Loader2 size={32} className='animate-spin ease-in' />
+                    </div>}
                 </div>
                 <div className='flex justify-between items-center gap-3 py-2'>
                     <Button size='middle' type="default" onClick={() => handlePrev()}>

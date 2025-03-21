@@ -1,37 +1,39 @@
 import React, { useState } from 'react';
 
 import {
-    Button,
-    Checkbox,
-    DatePicker,
-    Input,
-    InputProps,
-    Rate,
-    Select,
-    Table,
-    Upload,
+  Button,
+  Checkbox,
+  DatePicker,
+  Input,
+  Rate,
+  Select,
+  Table,
+  Upload,
 } from 'antd';
+import { TextAreaProps } from 'antd/es/input';
 import dayjs, { Dayjs } from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import { Heart } from 'lucide-react';
 
 import { UploadOutlined } from '@ant-design/icons';
 
+const { TextArea } = Input;
+
 dayjs.extend(customParseFormat);
 
 const dateFormat = 'YYYY/MM/DD';
 
 const FormFieldWrapper: React.FC<{ label: string; children: React.ReactNode }> = ({ label, children }) => (
-    <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{label}</label>
+    <div className="w-full flex flex-col gap-2 justify-center items-center h-full">
+        <span className="w-full text-lg font-semibold text-center">{label}</span>
         {children}
     </div>
 );
 
-interface FreeTextInputProps extends InputProps {
+interface FreeTextInputProps extends TextAreaProps {
     label: string;
     value?: string;
-    onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    onChange?: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
     disabled?: boolean;
     placeholder?: string;
 }
@@ -109,13 +111,13 @@ interface ClapProps {
 
 const FreeTextInput: React.FC<FreeTextInputProps> = ({ label, value, onChange, disabled, placeholder, ...props }) => (
     <FormFieldWrapper label={label}>
-        <Input type="text" className="w-full border rounded-md p-2 shadow-sm dark:bg-gray-800 dark:border-gray-600" value={value} onChange={onChange} disabled={disabled} placeholder={placeholder} {...props} />
+        <TextArea className="w-full !min-h-32 border rounded-md p-2 shadow-sm dark:bg-gray-800 dark:border-gray-600" value={value} onChange={onChange} disabled={disabled} placeholder={placeholder} {...props} />
     </FormFieldWrapper>
 );
 
 const SingleSelect: React.FC<SingleSelectProps> = ({ label, options, onChange, ...props }) => (
     <FormFieldWrapper label={label}>
-        <Select className="w-full" placeholder="Select an option" onChange={onChange} options={options.map((option) => ({ value: option, label: option }))} {...props} />
+        <Select className="w-full " placeholder="Select an option" onChange={onChange} options={options.map((option) => ({ value: option, label: option }))} {...props} />
     </FormFieldWrapper>
 );
 
@@ -125,7 +127,7 @@ const MultiSelect: React.FC<MultiSelectProps> = ({ label, options, onChange, ...
     </FormFieldWrapper>
 );
 
-const PictureSelection: React.FC<PictureSelectionProps> = ({ label, uploadButton, onChange, disabled, accept, multiple, ...props }) => (
+const PictureSelection: React.FC<PictureSelectionProps> = ({ label, uploadButton, onChange, disabled, accept, multiple = true, ...props }) => (
     <FormFieldWrapper label={label}>
         <Upload listType="picture" beforeUpload={() => false} onChange={onChange} disabled={disabled} accept={accept} multiple={multiple}>
             <Button icon={<UploadOutlined />}>Upload</Button>
@@ -135,19 +137,19 @@ const PictureSelection: React.FC<PictureSelectionProps> = ({ label, uploadButton
 
 const Rating: React.FC<RatingProps> = ({ label, value, onChange, ...props }) => (
     <FormFieldWrapper label={label}>
-        <Rate className="text-yellow-500" value={value} onChange={onChange} {...props} />
+        <Rate className="w-fit text-yellow-500 flex justify-center" value={value} onChange={onChange} {...props} />
     </FormFieldWrapper>
 );
 
 const NPS: React.FC<NPSProps> = ({ label, value, onChange, ...props }) => (
     <FormFieldWrapper label={label}>
-        <Rate allowHalf className="text-yellow-500" value={value} onChange={onChange} {...props} />
+        <Rate allowHalf className="w-fit flex text-yellow-500 justify-center" value={value} onChange={onChange} {...props} />
     </FormFieldWrapper>
 );
 
 const Ranking: React.FC<RankingProps> = ({ label, options, onChange, ...props }) => (
     <FormFieldWrapper label={label}>
-        <ul className="list-disc ml-5 dark:text-gray-300">
+        <ul className="w-full list-disc ml-5 dark:text-gray-300">
             {options.map((option, index) => (
                 <li key={index}>{option}</li>
             ))}
@@ -210,8 +212,7 @@ const Matrix: React.FC<MatrixProps> = ({ label, rows = sampleRows, columns = sam
     ];
 
     return (
-        <div>
-            <h3>{label}</h3>
+        <FormFieldWrapper label={"How satisfied are you with our services?"}>
             <Table
                 className="w-full"
                 dataSource={dataSource}
@@ -219,11 +220,11 @@ const Matrix: React.FC<MatrixProps> = ({ label, rows = sampleRows, columns = sam
                 pagination={false}
                 bordered
             />
-        </div>
+        </FormFieldWrapper>
     );
 };
 const ConsentCheckbox: React.FC<ConsentCheckboxProps> = ({ label, checked, onChange, ...props }) => (
-    <FormFieldWrapper label="">
+    <FormFieldWrapper label={"Let's agree to the terms and conditions"}>
         <Checkbox checked={checked} onChange={onChange} {...props}>{label}</Checkbox>
     </FormFieldWrapper>
 );
@@ -232,7 +233,7 @@ const FileUpload: React.FC<FileUploadProps> = ({ label, onChange, disabled, acce
     <FormFieldWrapper label={label}>
         <Upload onChange={onChange} disabled={disabled} accept={accept} multiple beforeUpload={() => false}>
             {uploadButton
-                || <Button icon={<UploadOutlined />}>Upload File</Button>
+                || <Button className='mx-auto' icon={<UploadOutlined />}>Upload File</Button>
             }
         </Upload>
     </FormFieldWrapper>
@@ -245,6 +246,7 @@ const DatePickerComponent: React.FC<DatePickerComponentProps> = ({ label, value,
             format={dateFormat}
             onChange={onChange}
             disabled={disabled}
+            className="w-full"
             placeholder={placeholder}
             {...props}
         />
@@ -258,6 +260,7 @@ const ScheduleMeeting: React.FC<ScheduleMeetingProps> = ({ label, value, onChang
             format={dateFormat}
             onChange={onChange}
             disabled={disabled}
+            className="w-full"
             placeholder={placeholder}
             {...props}
         />
@@ -271,18 +274,18 @@ const Clapping: React.FC<ClapProps> = ({ onChange, ...props }) => (
 );
 
 export {
-    Clapping,
-    ConsentCheckbox,
-    DatePickerComponent,
-    FileUpload,
-    FormFieldWrapper,
-    FreeTextInput,
-    Matrix,
-    MultiSelect,
-    NPS,
-    PictureSelection,
-    Ranking,
-    Rating,
-    ScheduleMeeting,
-    SingleSelect,
+  Clapping,
+  ConsentCheckbox,
+  DatePickerComponent,
+  FileUpload,
+  FormFieldWrapper,
+  FreeTextInput,
+  Matrix,
+  MultiSelect,
+  NPS,
+  PictureSelection,
+  Ranking,
+  Rating,
+  ScheduleMeeting,
+  SingleSelect,
 };
