@@ -1,11 +1,12 @@
 import axios from 'axios';
 
 export const getReviewList = async () => {
-    const response = await axios.get(process.env.NEXT_PUBLIC_BASE_URL + "/management/responses", {
-        headers: {
-            "x-api-key": "95b76a1251f3671243f240054c34175b",
-        },
-    });
+    // const response = await axios.get(process.env.NEXT_PUBLIC_BASE_URL + "/management/responses", {
+    //     headers: {
+    //         "x-api-key": "95b76a1251f3671243f240054c34175b",
+    //     },
+    // });
+    const response = await axios.get("https://api-tapnews.up.railway.app/test");
     if (response.status === 200) {
         return response.data?.data || [];
     }
