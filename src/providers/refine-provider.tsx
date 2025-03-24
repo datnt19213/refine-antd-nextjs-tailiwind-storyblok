@@ -13,6 +13,7 @@ import {
   DynamicRoute,
   dynamicRouteManager,
 } from '@/lib/refine-routes';
+import { dataProvider } from '@/services/data-provider';
 import {
   ErrorComponent,
   ThemedLayoutV2,
@@ -58,6 +59,7 @@ export function DynamicRefineProvider({ children }: { children: React.ReactNode 
     }}>
       <Refine
         routerProvider={routerProvider}
+        dataProvider={dataProvider}
         resources={resources}
         options={{
           syncWithLocation: true,

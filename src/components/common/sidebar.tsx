@@ -50,12 +50,12 @@ const Sidebar = ({
   };
 
   return (
-    <Layout className="h-screen">
+    <Layout className="min-h-screen flex flex-col justify-start h-auto">
       <Sider
         theme="light"
         trigger={null}
         collapsed={collapsed}
-        className="pt-16 border-r border-gray-200/50 "
+        className="pt-16 border-r border-gray-200/50 !sticky top-0 h-screen"
       >
         <Menu
           className="!border-none"
@@ -68,7 +68,7 @@ const Sidebar = ({
         />
       </Sider>
       <Layout className="bg-slate-100">
-        <Header className="!bg-transparent !px-4 border-gray-200/50 flex items-center">
+        <Header className="!px-4 !bg-white border-b border-gray-200/50 flex items-center !sticky top-0 z-50">
           <div className="flex items-center w-full justify-between">
             <div
               className="border-none bg-transparent hover:bg-gray-50 rounded-md transition-all cursor-pointer p-2 aspect-square w-fit h-fit"
