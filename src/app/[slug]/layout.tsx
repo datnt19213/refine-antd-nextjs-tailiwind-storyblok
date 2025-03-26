@@ -1,20 +1,22 @@
-"use client"
-import React, { FC } from 'react';
+"use client";
+import { useEffect } from 'react';
 
 import formbricks from '@formbricks/js';
 
-if (typeof window !== 'undefined') {
-    formbricks.init({
-        environmentId: "cm886h70s0009o7016x1zkzei",
-        appUrl: "https://formbricks-production-935b.up.railway.app/",
-    });
-}
-const Layout: FC<{ children: React.ReactNode }> = ({ children }) => {
-    return (
-        <>
-            {children}
-        </>
-    )
-}
+const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+    useEffect(() => {
+        if (typeof window !== "undefined") {
+            formbricks
+                .init({
+                    environmentId: "cm886h70s0009o7016x1zkzei",
+                    appUrl: "https://formbricks-production-935b.up.railway.app/",
+                })
+                .then(() => console.log("✅ Formbricks initialized"))
+                .catch((err) => console.error("❌ Formbricks init failed", err));
+        }
+    }, []); // Chạy 1 lần khi component mount
 
-export default Layout
+    return <>{children}</>;
+};
+
+export default Layout;
