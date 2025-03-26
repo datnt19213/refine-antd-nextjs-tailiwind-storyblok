@@ -1,3 +1,4 @@
+"use client";
 import React from 'react';
 
 import { Button } from 'antd';
@@ -17,19 +18,11 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import formbricks from '@formbricks/js';
 import { useTable } from '@refinedev/antd';
 import { useDelete } from '@refinedev/core';
 
 const Table = ({ block }: any) => {
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     const resReview = await getReviewList();
-  //     const resDirectus = await getHappiness();
-  //     console.log(resReview);
-  //   };
-  //   fetchData();
-  // }, [])
-
   const happinessTable = useTable({
     resource: "happiness",
   });
@@ -54,8 +47,29 @@ const Table = ({ block }: any) => {
 
   }
 
+
+  function handleDeleteRowOfSurvey(id: any) {
+    // 
+  }
+
+  const handleClick = async () => {
+    try {
+      const formbricksApi = formbricks.getApi();
+      if (!formbricksApi) {
+        console.error("❌ Formbricks API chưa sẵn sàng!");
+        return;
+      }
+
+      await formbricks.track("button_clicked", { button: "submit" });
+      console.log("✅ Event tracked successfully");
+    } catch (error) {
+      console.error("❌ Error tracking event:", error);
+    }
+  };
+
   return (
     <div className='flex flex-col gap-3 w-full'>
+      <button type="submit" onClick={handleClick}>Gửi</button>;
       <div className="p-4 rounded-lg bg-white w-full mt-3">
         {block.label === "All of Happiness" && (
           <div className="flex flex-col gap-3 w-full">
@@ -101,7 +115,7 @@ const Table = ({ block }: any) => {
                 {
                   happinessTable.tableProps.loading && (
                     <TableRow >
-                      <TableCell colSpan={4} className='text-center'>
+                      <TableCell colSpan={5} className='text-center'>
                         <Loader2 className='animate-spin m-auto' />
                       </TableCell>
                     </TableRow>
@@ -110,7 +124,7 @@ const Table = ({ block }: any) => {
                 {
                   (happinessTable.tableProps.dataSource?.length === 0 || !happinessTable.tableProps.dataSource) && !happinessTable.tableProps.loading && (
                     <TableRow >
-                      <TableCell colSpan={4} className='text-center'>
+                      <TableCell colSpan={5} className='text-center'>
                         No data
                       </TableCell>
                     </TableRow>
@@ -137,12 +151,27 @@ const Table = ({ block }: any) => {
                     <TableCell>{item.data.email}</TableCell>
                     <TableCell>{item.data.comment}</TableCell>
                     <TableCell>{item.data.totalClap}</TableCell>
+                    <TableCell className="text-right flex gap-2 justify-end">
+                      <Link href={`/dashboard/edit?${item.id}`}>
+                        <Button variant='outlined' className='w-10 h-10 !p-2 aspect-square'>
+                          <PenLine size={20} />
+                        </Button>
+
+                      </Link>
+
+                      <Button variant='outlined' className='w-10 h-10 !p-2 aspect-square hover:!border-red-500 hover:!text-red-500' onClick={() => {
+                        // console.log(item.id);
+                        handleDeleteRowOfSurvey(item.id);
+                      }}>
+                        <Trash size={20} />
+                      </Button>
+                    </TableCell>
                   </TableRow>
                 ))}
                 {
                   reviewTable.tableProps.loading && (
                     <TableRow >
-                      <TableCell colSpan={3} className='text-center'>
+                      <TableCell colSpan={4} className='text-center'>
                         <Loader2 className='animate-spin m-auto' />
                       </TableCell>
                     </TableRow>
@@ -151,7 +180,7 @@ const Table = ({ block }: any) => {
                 {
                   (reviewTable.tableProps.dataSource?.length === 0 || !reviewTable.tableProps.dataSource) && !reviewTable.tableProps.loading && (
                     <TableRow >
-                      <TableCell colSpan={3} className='text-center'>
+                      <TableCell colSpan={4} className='text-center'>
                         No data
                       </TableCell>
                     </TableRow>

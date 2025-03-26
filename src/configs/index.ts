@@ -1,0 +1,31 @@
+export const FORMBRICK_QUESTION_TYPE = [
+  {value: "openText", label: "Free Text", icon: "Text"},
+  {value: "multipleChoiceSingle", label: "Single Choice", icon: "CircleDot"},
+  {value: "multipleChoiceMulti", label: "Multiple Choice", icon: "CheckSquare"},
+  {value: "rating", label: "Rating", icon: "Star"},
+  {value: "nps", label: "NPS", icon: "Check"},
+  {value: "ranking", label: "Ranking", icon: "ArrowUp"},
+  {value: "matrix", label: "Matrix", icon: "Table"},
+  {value: "cta", label: "CTA", icon: "Link"},
+  {value: "consent", label: "Consent", icon: "Check"},
+  {value: "fileUpload", label: "File Upload", icon: "Paperclip"},
+  {value: "date", label: "Date", icon: "Calendar"},
+  {value: "cal", label: "Schedule Meeting", icon: "Calendar"},
+  {value: "address", label: "Address", icon: "MapPin"},
+];
+
+export enum KeyQuestionType {
+  "openText",
+  "multipleChoiceSingle",
+  "multipleChoiceMulti",
+  "rating",
+  "nps",
+  "ranking",
+  "matrix",
+  "cta",
+  "consent",
+  "fileUpload",
+  "date",
+  "cal",
+  "address",
+}

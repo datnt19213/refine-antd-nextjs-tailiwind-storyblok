@@ -29,6 +29,7 @@ export function DynamicRefineProvider({ children }: { children: React.ReactNode 
   const [menu, setMenu] = useState<any[]>([]);
 
   useEffect(() => {
+
     async function loadRoutes() {
       // Sync routes từ Storyblok
       const routes = await dynamicRouteManager.syncRoutesFromStoryblok();
@@ -38,7 +39,7 @@ export function DynamicRefineProvider({ children }: { children: React.ReactNode 
 
       const data = routes.map((item: DynamicRoute) => ({
         key: item.path,
-        icon: <img src={item.icon} className="size-5 aspect-square" />,
+        icon: <img src={item.icon} className="!size-5 aspect-square" />,
         label: item.p_name,
         order: item.order,
         // children: [],

@@ -15,14 +15,12 @@ import {
   useRouter,
 } from 'next/navigation';
 
+import { createSurvey } from '@/services';
 import { Icon } from '@iconify/react';
-
-import { ModalSurvey } from '../modals';
 
 const { Header, Sider, Content } = Layout;
 type SearchProps = GetProps<typeof Input.Search>;
 
-const { Search } = Input;
 
 const Sidebar = ({
   navigation,
@@ -49,6 +47,10 @@ const Sidebar = ({
     setOpenKeys(keys); // Giữ trạng thái mở menu
   };
 
+  async function handleFinish(values: any) {
+    await createSurvey(values);
+  }
+
   return (
     <Layout className="min-h-screen flex flex-col justify-start h-auto">
       <Sider
@@ -60,7 +62,16 @@ const Sidebar = ({
         <Menu
           className="!border-none"
           mode="vertical"
-          items={navigation}
+          items={navigation.map((item) => ({
+            key: item.key,
+            icon: <></>,
+            label: (
+              <div className="flex items-center gap-2 font-medium">
+                {item.icon}
+                {item.label}
+              </div>
+            ),
+          }))}
           selectedKeys={[pathName]}
           // openKeys={openKeys}
           onOpenChange={handleOpenChange}
@@ -89,7 +100,10 @@ const Sidebar = ({
               )}
             </div>
             <div className="flex items-center justify-end gap-3">
-              <ModalSurvey />
+              {/* <ModalSurvey /> */}
+              {/* <NewSurveyModal onFinish={(values) => {
+                handleFinish(values);
+              }} /> */}
               <Space.Compact>
                 <Button className="!p-0 h-8 aspect-square min-w-8">
                   <Icon color="#525251" icon="tabler:search" />
@@ -111,8 +125,8 @@ const Sidebar = ({
           </div>
         </Header>
         <Content className="p-4 max-w-[1440px] mx-auto">{children}</Content>
-      </Layout>
-    </Layout>
+      </Layout >
+    </Layout >
   );
 };
 

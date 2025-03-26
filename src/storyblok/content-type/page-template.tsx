@@ -17,6 +17,7 @@ interface PageTemplateProps {
   story: EnhancedStoryblokStory | any;
 }
 
+
 export default function PageTemplate({ story }: PageTemplateProps) {
   if (!story) {
     return <></>;
